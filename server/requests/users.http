@@ -1,0 +1,27 @@
+
+### Register User
+POST http://localhost:5001/users/register
+Content-Type: application/json
+
+{
+    "fullName": "Johnni Doer",
+    "email": "john.doe453@example.com",
+    "password": "yourSecurePassword123"
+}
+
+
+### Login User
+POST http://localhost:5001/users/login
+Content-Type: application/json
+
+{
+    "email": "john.doe453@example.com",
+    "password": "yourSecurePassword123"
+}
+
+
+### Get Products (to get a valid product ID)
+### Logout
+POST   http://localhost:5001/users/logout
+Content-Type: application/json
+Cookie: jwtToken={eyJpZCI6IjY3YWI2NDE3MWJlMGI2ZGE2NTdhNTE2MCIsImlhdCI6MTczOTM2NDUyMSwiZXhwIjoxNzM5NDUwOTIxfQ.pqmyfJUp_0BrQczD-VjYUJkus7VjqEWxhdRL7o20LrM}

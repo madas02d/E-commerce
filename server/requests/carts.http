@@ -1,0 +1,36 @@
+### Get Cart
+GET http://localhost:5001/carts/67adb484bca356fb3a76620f
+
+### Add to Cart
+POST http://localhost:5001/carts/67adb484bca356fb3a76620f/add
+Content-Type: application/json
+
+{
+    "productId":"67acb46e1f706ade62041364",
+    "selectedSize":"m",
+    "quantity": 2
+}
+
+### Update Cart Item
+PATCH http://localhost:5001/carts/67adb484bca356fb3a76620f/update
+Content-Type: application/json
+
+{
+    "productId": "67acb46e1f706ade62041364",
+    "quantity": 3,
+    "selectedSize": "m"
+}
+
+### Remove from Cart
+DELETE http://localhost:5001/carts/67adb484bca356fb3a76620f/remove
+Content-Type: application/json
+
+{
+    "productId": "67acb46e1f706ade62041364",
+    "quantity": 2,
+    "selectedSize": "m"
+}
+
+### Get Cart
+GET http://localhost:5001/carts/67adb484bca356fb3a76620f
+

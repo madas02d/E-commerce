@@ -1,0 +1,48 @@
+/* Import Merriweather font from Fontsource */
+@import '@fontsource/merriweather/300.css';
+@import '@fontsource/merriweather/400.css';
+@import '@fontsource/merriweather/700.css';
+@import '@fontsource/merriweather/900.css';
+@import '@fontsource/merriweather/300-italic.css';
+@import '@fontsource/merriweather/400-italic.css';
+@import '@fontsource/merriweather/700-italic.css';
+@import '@fontsource/merriweather/900-italic.css';
+
+@import "tailwindcss";
+
+/* Apply Merriweather font globally */
+body {
+  font-family: 'Merriweather', serif;
+}
+
+/* Custom animations for toast notifications */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-slide-out {
+  animation: slideOut 0.3s ease-in;
+}
+

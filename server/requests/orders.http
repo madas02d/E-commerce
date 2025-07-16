@@ -1,0 +1,43 @@
+### Login First (to get token)
+# Testing flow:
+# Run the login request first to get the authentication token
+# Create an order (make sure you have items in your cart first)
+# The create order response will give you an orderId
+# Use that orderId to test get and cancel operations
+# Make sure to:
+# Have a registered user
+# Have items in the cart
+# Run requests in sequence
+
+POST http://localhost:5001/users/login
+Content-Type: application/json
+
+{
+    "email": "john.doe1@example.com",
+    "password": "yourSecurePassword123"
+}
+
+
+
+### Create Order
+POST http://localhost:5001/orders/create
+Content-Type: application/json
+Cookie: jwtToken={{token}}
+
+{
+    "address": "123 Main St, New York, NY 10001",
+    "phone": "+1234567890"
+}
+
+
+### Get All Orders for User
+GET http://localhost:5001/orders/user
+Cookie: jwtToken={{token}}
+
+### Get Specific Order
+GET http://localhost:5001/orders/{{orderId}}
+Cookie: jwtToken={{token}}
+
+### Cancel Order
+DELETE http://localhost:5001/orders/{{orderId}}
+Cookie: jwtToken={{token}} 
