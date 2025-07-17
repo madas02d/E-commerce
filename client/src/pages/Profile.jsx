@@ -1,6 +1,10 @@
+// Import React hooks for state management
 import React, { useState, useContext } from 'react';
+// Import React Router hook for navigation
 import { useNavigate } from 'react-router-dom';
+// Import authentication context for user data and login function
 import { AuthContext } from '../context/AuthContext';
+// Import icons for UI elements
 import { 
   MdArrowBack, 
   MdPerson, 
@@ -9,15 +13,26 @@ import {
   MdSave,
   MdEdit
 } from 'react-icons/md';
+// Import axios instance for API calls
 import axios from '../utils/axios';
 
+/**
+ * Profile Component
+ * User profile management page with edit functionality and password change
+ */
 const Profile = () => {
+  // React Router hook for navigation
   const navigate = useNavigate();
+  // Get user data and login function from authentication context
   const { user, loginUser } = useContext(AuthContext);
+  // Loading state during form submission
   const [loading, setLoading] = useState(false);
+  // Message state for success/error feedback
   const [message, setMessage] = useState({ type: '', text: '' });
+  // Edit mode state to toggle form editing
   const [isEditing, setIsEditing] = useState(false);
 
+  // Form data state with user information and password fields
   const [formData, setFormData] = useState({
     fullName: user?.fullName || '',
     email: user?.email || '',
@@ -26,6 +41,10 @@ const Profile = () => {
     confirmPassword: ''
   });
 
+  /**
+   * Handle form input changes
+   * @param {Event} e - Input change event
+   */
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -33,6 +52,10 @@ const Profile = () => {
     });
   };
 
+  /**
+   * Handle form submission for profile update
+   * @param {Event} e - Form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -51,7 +74,7 @@ const Profile = () => {
         }
       }
 
-      // Update user profile
+      // Send profile update request to backend
       const response = await axios.put('/users/profile', {
         fullName: formData.fullName,
         email: formData.email,
@@ -59,13 +82,13 @@ const Profile = () => {
         newPassword: formData.newPassword
       });
 
-      // Update local user state
+      // Update local user state with new data
       if (response.data.success) {
         loginUser(response.data.data);
         setMessage({ type: 'success', text: 'Profile updated successfully!' });
         setIsEditing(false);
         
-        // Clear password fields
+        // Clear password fields after successful update
         setFormData(prev => ({
           ...prev,
           currentPassword: '',
@@ -84,6 +107,9 @@ const Profile = () => {
     }
   };
 
+  /**
+   * Toggle edit mode and clear messages when entering edit mode
+   */
   const toggleEdit = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
@@ -93,7 +119,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header with back navigation */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center py-4">
@@ -111,9 +137,10 @@ const Profile = () => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          {/* Profile Header */}
+          {/* Profile Header with user info and edit button */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
+              {/* User avatar placeholder */}
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4">
                 <MdPerson className="w-8 h-8 text-blue-600" />
               </div>
@@ -122,6 +149,7 @@ const Profile = () => {
                 <p className="text-gray-600">{user?.email}</p>
               </div>
             </div>
+            {/* Edit/Cancel button */}
             <button
               onClick={toggleEdit}
               className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
@@ -131,7 +159,7 @@ const Profile = () => {
             </button>
           </div>
 
-          {/* Message Display */}
+          {/* Success/Error message display */}
           {message.text && (
             <div className={`mb-6 p-4 rounded-lg ${
               message.type === 'success' 
@@ -144,10 +172,11 @@ const Profile = () => {
 
           {/* Profile Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Basic Information */}
+            {/* Basic Information Section */}
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Full Name field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     <MdPerson className="inline w-4 h-4 mr-1" />
@@ -163,6 +192,7 @@ const Profile = () => {
                     required
                   />
                 </div>
+                {/* Email field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     <MdEmail className="inline w-4 h-4 mr-1" />
@@ -181,12 +211,13 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Password Change Section */}
+            {/* Password Change Section (only visible in edit mode) */}
             {isEditing && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
                 <p className="text-sm text-gray-600 mb-4">Leave blank if you don't want to change your password</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Current Password field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       <MdLock className="inline w-4 h-4 mr-1" />
@@ -201,6 +232,7 @@ const Profile = () => {
                       placeholder="Enter current password"
                     />
                   </div>
+                  {/* New Password field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       <MdLock className="inline w-4 h-4 mr-1" />
@@ -215,6 +247,7 @@ const Profile = () => {
                       placeholder="Enter new password"
                     />
                   </div>
+                  {/* Confirm New Password field (full width) */}
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       <MdLock className="inline w-4 h-4 mr-1" />
@@ -233,7 +266,7 @@ const Profile = () => {
               </div>
             )}
 
-            {/* Submit Button */}
+            {/* Submit Button (only visible in edit mode) */}
             {isEditing && (
               <div className="flex justify-end">
                 <button
@@ -261,16 +294,18 @@ const Profile = () => {
             )}
           </form>
 
-          {/* Account Information */}
+          {/* Account Information Section */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Account Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              {/* Member since date */}
               <div>
                 <span className="text-gray-600">Member since:</span>
                 <span className="ml-2 text-gray-900">
                   {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
+              {/* Account status */}
               <div>
                 <span className="text-gray-600">Account status:</span>
                 <span className="ml-2 text-green-600 font-medium">Active</span>

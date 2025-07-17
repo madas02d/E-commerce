@@ -1,9 +1,15 @@
 
+// Import React hooks for state management and side effects
 import React, { useContext, useState, useEffect } from 'react';
+// Import authentication context for user data and logout functionality
 import { AuthContext } from '../context/AuthContext';
+// Import cart context for cart statistics
 import { useCart } from '../context/CartContext';
+// Import React Router hook for navigation
 import { useNavigate } from 'react-router-dom';
+// Import axios instance for API calls
 import axios from '../utils/axios';
+// Import icons for UI elements
 import { 
   MdShoppingBag, 
   MdFavorite, 
@@ -19,11 +25,20 @@ import {
 } from 'react-icons/md';
 import { AiOutlineHeart } from 'react-icons/ai';
 
+/**
+ * Dashboard Component
+ * Main user dashboard with statistics, quick actions, and recent orders
+ */
 const Dashboard = () => {
+  // Get user data and logout function from authentication context
   const { user, logoutUser } = useContext(AuthContext);
+  // Get cart statistics from cart context
   const { getCartCount, getCartTotal } = useCart();
+  // React Router hook for navigation
   const navigate = useNavigate();
+  // Active tab state for dashboard sections
   const [activeTab, setActiveTab] = useState('overview');
+  // User statistics and data from backend
   const [userStats, setUserStats] = useState({
     totalSpent: 0,
     wishlistCount: 0,
@@ -31,13 +46,21 @@ const Dashboard = () => {
     orderCount: 0,
     recentOrders: []
   });
+  // Loading state while fetching dashboard data
   const [loading, setLoading] = useState(true);
+  // Error state for displaying error messages
   const [error, setError] = useState('');
 
+  /**
+   * Fetch user statistics on component mount
+   */
   useEffect(() => {
     fetchUserStats();
   }, []);
 
+  /**
+   * Fetch user statistics and recent orders from backend
+   */
   const fetchUserStats = async () => {
     try {
       setLoading(true);
@@ -53,11 +76,19 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Handle user logout and redirect to login page
+   */
   const handleLogout = () => {
     logoutUser();
     navigate('/login');
   };
 
+  /**
+   * Format date string to readable format
+   * @param {string} dateString - Date string to format
+   * @returns {string} Formatted date string
+   */
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -66,6 +97,11 @@ const Dashboard = () => {
     });
   };
 
+  /**
+   * Get color classes for order status badges
+   * @param {string} status - Order status
+   * @returns {string} Tailwind CSS color classes
+   */
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
@@ -77,6 +113,7 @@ const Dashboard = () => {
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
+  // Dashboard statistics cards configuration
   const dashboardStats = [
     {
       title: 'Cart Items',
@@ -108,6 +145,7 @@ const Dashboard = () => {
     }
   ];
 
+  // Quick action buttons configuration
   const quickActions = [
     {
       title: 'Continue Shopping',
@@ -132,6 +170,7 @@ const Dashboard = () => {
     }
   ];
 
+  // Loading state while fetching dashboard data
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -145,7 +184,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header with user info and navigation */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 space-y-4 sm:space-y-0">
@@ -154,6 +193,7 @@ const Dashboard = () => {
               <p className="text-sm sm:text-base text-gray-600">Welcome back, {user?.fullName || 'User'}!</p>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Refresh dashboard button */}
               <button
                 onClick={fetchUserStats}
                 className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
@@ -163,6 +203,7 @@ const Dashboard = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
+              {/* Cart button with item count badge */}
               <button
                 onClick={() => navigate('/cart')}
                 className="relative p-2 text-gray-600 hover:text-gray-900"
@@ -174,6 +215,7 @@ const Dashboard = () => {
                   </span>
                 )}
               </button>
+              {/* Logout button */}
               <button
                 onClick={handleLogout}
                 className="flex items-center text-gray-600 hover:text-red-600 transition-colors text-sm sm:text-base"
@@ -187,13 +229,14 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Error message display */}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-800">{error}</p>
           </div>
         )}
 
-        {/* Stats Grid */}
+        {/* Statistics Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {dashboardStats.map((stat, index) => (
             <div
@@ -214,7 +257,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions Section */}
         <div className="mb-6 sm:mb-8">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -234,7 +277,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Recent Orders */}
+        {/* Recent Orders Section */}
         <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-0">Recent Orders</h2>
@@ -252,9 +295,11 @@ const Dashboard = () => {
             <div className="space-y-3 sm:space-y-4">
               {userStats.recentOrders.map((order, index) => (
                 <div key={order._id} className="flex items-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+                  {/* Order icon */}
                   <div className="bg-blue-100 p-2 rounded-lg mr-3 sm:mr-4">
                     <MdShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
+                  {/* Order details */}
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                       <div className="flex-1 min-w-0">
@@ -268,6 +313,7 @@ const Dashboard = () => {
                           {formatDate(order.createdAt)}
                         </p>
                       </div>
+                      {/* Order status badge */}
                       <span className={`px-2 py-1 rounded-full text-xs font-medium mt-2 sm:mt-0 ${getStatusColor(order.status)}`}>
                         {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </span>
@@ -277,6 +323,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
+            /* Empty state for no orders */
             <div className="text-center py-8">
               <MdShoppingBag className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-600">No orders yet</p>
@@ -285,10 +332,11 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Shopping Insights */}
+        {/* Shopping Insights Section */}
         <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Shopping Insights</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            {/* Total spent insight */}
             <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 sm:p-6 rounded-lg">
               <div className="flex items-center mb-3 sm:mb-4">
                 <MdTrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
@@ -298,6 +346,7 @@ const Dashboard = () => {
               <p className="text-xs sm:text-sm text-gray-600 mt-2">Lifetime spending with DressMe</p>
             </div>
             
+            {/* Wishlist items insight */}
             <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 sm:p-6 rounded-lg">
               <div className="flex items-center mb-3 sm:mb-4">
                 <MdStar className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-2" />

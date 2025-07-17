@@ -1,7 +1,12 @@
+// Import React hooks for state management and side effects
 import React, { useState, useEffect, useContext } from 'react';
+// Import React Router hook for navigation
 import { useNavigate } from 'react-router-dom';
+// Import authentication context for user data
 import { AuthContext } from '../context/AuthContext';
+// Import axios instance for API calls
 import axios from '../utils/axios';
+// Import icons for UI elements
 import { 
   MdArrowBack, 
   MdShoppingBag, 
@@ -11,17 +16,32 @@ import {
   MdReceipt
 } from 'react-icons/md';
 
+/**
+ * Orders Component
+ * Displays user's order history with detailed order information
+ */
 const Orders = () => {
+  // React Router hook for navigation
   const navigate = useNavigate();
+  // Get current user from authentication context
   const { user } = useContext(AuthContext);
+  // Orders data from backend
   const [orders, setOrders] = useState([]);
+  // Loading state while fetching orders
   const [loading, setLoading] = useState(true);
+  // Error state for displaying error messages
   const [error, setError] = useState('');
 
+  /**
+   * Fetch user orders on component mount
+   */
   useEffect(() => {
     fetchOrders();
   }, []);
 
+  /**
+   * Fetch user's order history from backend API
+   */
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -36,6 +56,11 @@ const Orders = () => {
     }
   };
 
+  /**
+   * Format date string to readable format with time
+   * @param {string} dateString - Date string to format
+   * @returns {string} Formatted date and time string
+   */
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -46,6 +71,11 @@ const Orders = () => {
     });
   };
 
+  /**
+   * Get color classes for order status badges
+   * @param {string} status - Order status
+   * @returns {string} Tailwind CSS color classes
+   */
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
@@ -57,6 +87,11 @@ const Orders = () => {
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
+  /**
+   * Get emoji icon for order status
+   * @param {string} status - Order status
+   * @returns {string} Emoji icon for the status
+   */
   const getStatusIcon = (status) => {
     const icons = {
       pending: '⏳',
@@ -68,6 +103,7 @@ const Orders = () => {
     return icons[status] || '📋';
   };
 
+  // Loading state while fetching orders
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -81,7 +117,7 @@ const Orders = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header with back navigation */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -102,12 +138,14 @@ const Orders = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error message display */}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-800">{error}</p>
           </div>
         )}
 
+        {/* Empty state - no orders */}
         {orders.length === 0 ? (
           <div className="text-center py-12">
             <MdShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -121,10 +159,11 @@ const Orders = () => {
             </button>
           </div>
         ) : (
+          /* Orders list */
           <div className="space-y-6">
             {orders.map((order) => (
               <div key={order._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                {/* Order Header */}
+                {/* Order Header with order ID, date, status, and total */}
                 <div className="p-6 border-b border-gray-200">
                   <div className="flex justify-between items-start">
                     <div>
@@ -137,6 +176,7 @@ const Orders = () => {
                       </p>
                     </div>
                     <div className="text-right">
+                      {/* Order status badge */}
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                         {getStatusIcon(order.status)} {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </span>
@@ -147,12 +187,13 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {/* Order Items */}
+                {/* Order Items Section */}
                 <div className="p-6">
                   <h4 className="font-medium text-gray-900 mb-4">Items ({order.items.length})</h4>
                   <div className="space-y-4">
                     {order.items.map((item, index) => (
                       <div key={index} className="flex items-center space-x-4">
+                        {/* Product image or placeholder */}
                         {item.product && item.product.image ? (
                           <img
                             src={item.product.image}
@@ -164,6 +205,7 @@ const Orders = () => {
                             <span className="text-gray-500 text-xs">No Image</span>
                           </div>
                         )}
+                        {/* Product details */}
                         <div className="flex-1">
                           <h5 className="font-medium text-gray-900">
                             {item.product?.title || 'Product Unavailable'}
@@ -173,6 +215,7 @@ const Orders = () => {
                           </p>
                           <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                         </div>
+                        {/* Item price */}
                         <div className="text-right">
                           <p className="font-medium text-gray-900">
                             €{((item.product?.price || 0) * item.quantity).toFixed(2)}
@@ -186,10 +229,11 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {/* Order Details */}
+                {/* Order Details Section - Shipping and Contact Info */}
                 <div className="bg-gray-50 p-6">
                   <h4 className="font-medium text-gray-900 mb-4">Order Details</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Shipping address */}
                     <div>
                       <p className="text-sm text-gray-600 flex items-center mb-2">
                         <MdLocationOn className="w-4 h-4 mr-2" />
@@ -197,6 +241,7 @@ const Orders = () => {
                       </p>
                       <p className="text-gray-900">{order.address}</p>
                     </div>
+                    {/* Contact phone (if available) */}
                     {order.phone && (
                       <div>
                         <p className="text-sm text-gray-600 flex items-center mb-2">
@@ -209,7 +254,7 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {/* Order Summary */}
+                {/* Order Summary Section */}
                 <div className="p-6 border-t border-gray-200">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">

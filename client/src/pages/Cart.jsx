@@ -1,12 +1,24 @@
+// Import React hooks for state management
 import React, { useState, useContext } from 'react';
+// Import cart context for cart management functionality
 import { useCart } from '../context/CartContext';
+// Import authentication context to check user login status
 import { AuthContext } from '../context/AuthContext';
+// Import React Router hook for navigation
 import { useNavigate } from 'react-router-dom';
+// Import icons for cart actions (delete, add, remove, lock)
 import { MdDelete, MdAdd, MdRemove, MdLock } from 'react-icons/md';
+// Import back arrow icon for navigation
 import { AiOutlineArrowLeft } from 'react-icons/ai';
+// Import toast notification component
 import Toast from '../components/Toast';
 
+/**
+ * Cart Component
+ * Displays shopping cart items with quantity management and checkout functionality
+ */
 const Cart = () => {
+  // Get cart functionality from context
   const { 
     cart, 
     removeFromCart, 
@@ -15,19 +27,33 @@ const Cart = () => {
     clearCart,
     loading 
   } = useCart();
+  // Get current user from authentication context
   const { user } = useContext(AuthContext);
+  // React Router hook for navigation
   const navigate = useNavigate();
+  // Toast notification state for user feedback
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
+  /**
+   * Handle quantity changes for cart items
+   * @param {string} productId - ID of the product to update
+   * @param {number} newQuantity - New quantity value
+   */
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity <= 0) {
+      // Remove item if quantity becomes 0 or negative
       await removeFromCart(productId);
     } else {
+      // Update quantity if positive
       await updateQuantity(productId, newQuantity);
     }
   };
 
+  /**
+   * Handle checkout process with authentication check
+   */
   const handleCheckout = () => {
+    // Check if cart is empty
     if (cart.length === 0) {
       setToast({ show: true, message: 'Your cart is empty!', type: 'warning' });
       return;
@@ -47,9 +73,11 @@ const Cart = () => {
       return;
     }
     
+    // Navigate to checkout page
     navigate('/checkout');
   };
 
+  // Loading state while cart data is being fetched
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -61,10 +89,12 @@ const Cart = () => {
     );
   }
 
+  // Empty cart state
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto p-4 sm:p-6">
+          {/* Header with back button */}
           <div className="flex items-center mb-4 sm:mb-6">
             <button
               onClick={() => navigate(-1)}
@@ -76,6 +106,7 @@ const Cart = () => {
             <h1 className="text-xl sm:text-2xl font-bold">Shopping Cart</h1>
           </div>
           
+          {/* Empty cart message */}
           <div className="bg-white rounded-lg shadow-md p-6 sm:p-8 text-center">
             <div className="text-gray-500 mb-4">
               <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,6 +130,7 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-4xl mx-auto p-4 sm:p-6">
+        {/* Header with back button and clear cart option */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
           <div className="flex items-center">
             <button
@@ -118,35 +150,43 @@ const Cart = () => {
           </button>
         </div>
 
+        {/* Main cart layout with items and order summary */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Cart Items */}
+          {/* Cart Items Section */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md">
               {cart.map((item) => (
                 <div key={item.id} className="flex items-center p-3 sm:p-4 border-b last:border-b-0">
+                  {/* Product image */}
                   <img
                     src={item.image}
                     alt={item.title}
                     className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg mr-3 sm:mr-4 flex-shrink-0"
                   />
+                  {/* Product details */}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{item.title}</h3>
                     <p className="text-gray-600 text-xs sm:text-sm">€{item.price}</p>
                   </div>
+                  {/* Quantity controls and remove button */}
                   <div className="flex items-center space-x-1 sm:space-x-2">
+                    {/* Decrease quantity button */}
                     <button
                       onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                       className="p-1 rounded-full hover:bg-gray-100"
                     >
                       <MdRemove className="w-4 h-4" />
                     </button>
+                    {/* Quantity display */}
                     <span className="w-6 sm:w-8 text-center text-sm sm:text-base">{item.quantity}</span>
+                    {/* Increase quantity button */}
                     <button
                       onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                       className="p-1 rounded-full hover:bg-gray-100"
                     >
                       <MdAdd className="w-4 h-4" />
                     </button>
+                    {/* Remove item button */}
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="p-1 rounded-full hover:bg-red-100 text-red-500 ml-1 sm:ml-2"
@@ -159,10 +199,11 @@ const Cart = () => {
             </div>
           </div>
 
-          {/* Order Summary */}
+          {/* Order Summary Section */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
               <h2 className="text-base sm:text-lg font-semibold mb-4">Order Summary</h2>
+              {/* Price breakdown */}
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm sm:text-base">
                   <span>Subtotal ({cart.length} items)</span>
@@ -179,6 +220,8 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
+              
+              {/* Login reminder for non-authenticated users */}
               {!user && (
                 <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <div className="flex items-center text-yellow-800">
@@ -196,6 +239,8 @@ const Cart = () => {
                   </button>
                 </div>
               )}
+              
+              {/* Checkout button */}
               <button
                 onClick={!user ? () => navigate('/login') : handleCheckout}
                 className={`w-full py-2 sm:py-3 px-4 rounded-lg font-medium text-sm sm:text-base transition-colors ${
@@ -212,7 +257,7 @@ const Cart = () => {
         </div>
       </div>
 
-      {/* Toast Notification */}
+      {/* Toast notification for user feedback */}
       {toast.show && (
         <Toast
           message={toast.message}

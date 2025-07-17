@@ -1,9 +1,16 @@
+// Import React hooks for state management and side effects
 import React, { useState, useContext, useEffect } from 'react';
+// Import React Router hook for navigation
 import { useNavigate } from 'react-router-dom';
+// Import cart context for cart management
 import { useCart } from '../context/CartContext';
+// Import authentication context to check user login status
 import { AuthContext } from '../context/AuthContext';
+// Import payment form component
 import PaymentForm from '../components/PaymentForm';
+// Import axios instance for API calls
 import axios from '../utils/axios';
+// Import icons for UI elements
 import { 
   MdArrowBack, 
   MdLocationOn, 
@@ -14,21 +21,30 @@ import {
 } from 'react-icons/md';
 import { AiOutlineLock } from 'react-icons/ai';
 
+/**
+ * Checkout Component
+ * Multi-step checkout process with shipping and payment information
+ */
 const Checkout = () => {
+  // React Router hook for navigation
   const navigate = useNavigate();
+  // Get cart functionality from context
   const { cart, getCartTotal, clearCart } = useCart();
+  // Get current user from authentication context
   const { user } = useContext(AuthContext);
+  // Current step in checkout process (1: Shipping, 2: Payment)
   const [currentStep, setCurrentStep] = useState(1);
+  // Loading state during order placement
   const [loading, setLoading] = useState(false);
 
-  // Redirect to login if not authenticated
+  // Redirect to login if user is not authenticated
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
 
-  // Form states
+  // Shipping information form state
   const [shippingInfo, setShippingInfo] = useState({
     firstName: user?.fullName?.split(' ')[0] || '',
     lastName: user?.fullName?.split(' ').slice(1).join(' ') || '',
@@ -40,14 +56,17 @@ const Checkout = () => {
     country: 'Netherlands'
   });
 
+  // Payment information form state
   const [paymentInfo, setPaymentInfo] = useState({
     cardNumber: '',
     cardName: '',
     expiryDate: '',
     cvv: ''
   });
+  // Payment validation errors
   const [paymentErrors, setPaymentErrors] = useState({});
 
+  // Order summary with calculated totals
   const [orderSummary] = useState({
     subtotal: getCartTotal(),
     shipping: 0,
@@ -55,6 +74,10 @@ const Checkout = () => {
     total: getCartTotal() * 1.21
   });
 
+  /**
+   * Handle shipping information form changes
+   * @param {Event} e - Input change event
+   */
   const handleShippingChange = (e) => {
     setShippingInfo({
       ...shippingInfo,
@@ -62,24 +85,31 @@ const Checkout = () => {
     });
   };
 
-
-
+  /**
+   * Validate shipping information form
+   * @returns {boolean} True if all required fields are filled
+   */
   const validateShipping = () => {
     const required = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'postalCode'];
     return required.every(field => shippingInfo[field].trim() !== '');
   };
 
+  /**
+   * Validate payment information form
+   * @returns {boolean} True if all payment fields are valid
+   */
   const validatePayment = () => {
     const errors = {};
     const required = ['cardNumber', 'cardName', 'expiryDate', 'cvv'];
     
+    // Check required fields
     required.forEach(field => {
       if (!paymentInfo[field].trim()) {
         errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
       }
     });
 
-    // Additional validation
+    // Additional validation rules
     if (paymentInfo.cardNumber && paymentInfo.cardNumber.replace(/\s/g, '').length < 13) {
       errors.cardNumber = 'Please enter a valid card number';
     }
@@ -92,6 +122,9 @@ const Checkout = () => {
     return Object.keys(errors).length === 0;
   };
 
+  /**
+   * Handle navigation between checkout steps
+   */
   const handleNextStep = () => {
     if (currentStep === 1 && validateShipping()) {
       setCurrentStep(2);
@@ -100,6 +133,9 @@ const Checkout = () => {
     }
   };
 
+  /**
+   * Handle order placement with backend API
+   */
   const handlePlaceOrder = async () => {
     setLoading(true);
     try {
@@ -115,7 +151,7 @@ const Checkout = () => {
         return;
       }
 
-      // Create order with backend
+      // Prepare order data for backend
       const orderData = {
         address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.postalCode}, ${shippingInfo.country}`,
         phone: shippingInfo.phone,
@@ -127,6 +163,7 @@ const Checkout = () => {
         }))
       };
 
+      // Send order creation request to backend
       const response = await axios.post('/orders/create', orderData);
       
       if (response.data.success) {
@@ -152,8 +189,7 @@ const Checkout = () => {
     }
   };
 
-
-
+  // Empty cart state
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -174,7 +210,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header with back navigation */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center py-4">
@@ -192,10 +228,10 @@ const Checkout = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Checkout Form */}
+          {/* Checkout Form Section */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-              {/* Progress Steps */}
+              {/* Progress Steps Indicator */}
               <div className="flex items-center mb-6">
                 <div className={`flex items-center ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -216,7 +252,7 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Step 1: Shipping Information */}
+              {/* Step 1: Shipping Information Form */}
               {currentStep === 1 && (
                 <div>
                   <div className="flex items-center mb-4">
@@ -224,6 +260,7 @@ const Checkout = () => {
                     <h2 className="text-lg font-semibold">Shipping Information</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* First Name field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                       <input
@@ -235,6 +272,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* Last Name field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                       <input
@@ -246,6 +284,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* Email field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                       <input
@@ -257,6 +296,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* Phone field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                       <input
@@ -268,6 +308,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* Address field (full width) */}
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
                       <input
@@ -279,6 +320,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* City field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
                       <input
@@ -290,6 +332,7 @@ const Checkout = () => {
                         required
                       />
                     </div>
+                    {/* Postal Code field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
                       <input
@@ -305,7 +348,7 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Step 2: Payment Information */}
+              {/* Step 2: Payment Information Form */}
               {currentStep === 2 && (
                 <div>
                   <div className="flex items-center mb-4">
@@ -322,6 +365,7 @@ const Checkout = () => {
 
               {/* Navigation Buttons */}
               <div className="flex justify-between mt-6">
+                {/* Back button (only show if not on first step) */}
                 {currentStep > 1 && (
                   <button
                     onClick={() => setCurrentStep(currentStep - 1)}
@@ -330,6 +374,7 @@ const Checkout = () => {
                     Back
                   </button>
                 )}
+                {/* Continue/Place Order button */}
                 <button
                   onClick={handleNextStep}
                   disabled={loading}
@@ -350,12 +395,12 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Order Summary */}
+          {/* Order Summary Section */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
               <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
               
-              {/* Cart Items */}
+              {/* Cart Items List */}
               <div className="space-y-3 mb-4">
                 {cart.map((item) => (
                   <div key={item.id} className="flex items-center">
@@ -373,7 +418,7 @@ const Checkout = () => {
                 ))}
               </div>
 
-              {/* Order Totals */}
+              {/* Order Totals Breakdown */}
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>

@@ -1,24 +1,44 @@
+// Import React hooks and context for state management
 import React, { useState, useContext } from "react";
+// Import React Router hooks for navigation
 import { useNavigate, Link } from "react-router-dom";
+// Import axios instance for API calls
 import axios from "../utils/axios";
+// Import authentication context for user registration
 import { AuthContext } from "../context/AuthContext";
+// Import social media icons for registration options
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+// Import company logo
 import dmlogo from "../assets/dmlogo.png";
+// Import validation utilities for form validation and input sanitization
 import { validateRegistrationForm, sanitizeInput } from "../utils/validation";
 
+/**
+ * Register Component
+ * Handles new user registration with form validation and social registration options
+ */
 const Register = () => {
+  // React Router hook for programmatic navigation
   const navigate = useNavigate();
+  // Get login function from authentication context to auto-login after registration
   const { loginUser } = useContext(AuthContext);
   
+  // Form state management with all registration fields
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
+  // Validation errors state
   const [errors, setErrors] = useState({});
+  // General error message state
   const [errorMsg, setErrorMsg] = useState("");
 
+  /**
+   * Handle input field changes
+   * @param {Event} e - Input change event
+   */
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -26,12 +46,16 @@ const Register = () => {
     });
   };
 
+  /**
+   * Handle form submission for user registration
+   * @param {Event} e - Form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setErrors({});
 
-    // Sanitize inputs
+    // Sanitize all input data to prevent XSS attacks
     const sanitizedData = {
       fullName: sanitizeInput(formData.fullName),
       email: sanitizeInput(formData.email),
@@ -39,7 +63,7 @@ const Register = () => {
       confirmPassword: formData.confirmPassword
     };
 
-    // Validate form
+    // Validate form data using validation utility
     const validation = validateRegistrationForm(sanitizedData);
     if (!validation.isValid) {
       setErrors(validation.errors);
@@ -47,10 +71,17 @@ const Register = () => {
     }
 
     try {
+      // Extract registration data (excluding confirmPassword)
       const { fullName, email, password } = sanitizedData;
+      
+      // Send registration request to backend API
       const response = await axios.post("/users/register", { fullName, email, password });
       const { data: userData } = response.data;
+      
+      // Auto-login user after successful registration
       loginUser(userData);
+      
+      // Redirect to homepage
       navigate("/");
     } catch (error) {
       console.error("Registration error:", error);
@@ -59,22 +90,28 @@ const Register = () => {
   };
 
   return (
+    // Main container with responsive padding
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
+      {/* Registration form container */}
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
+          {/* Header section with logo and title */}
           <div className="text-center mb-6">
             <img src={dmlogo} alt="Logo" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4" />
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Create an Account</h2>
             <p className="text-sm text-gray-600">Join DressMe and start your fashion journey</p>
           </div>
           
+          {/* Error message display */}
           {errorMsg && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
               <p className="text-red-800 text-sm">{errorMsg}</p>
             </div>
           )}
 
+          {/* Registration form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Full Name input field */}
             <div>
               <label htmlFor="fullName" className="sr-only">Full Name</label>
               <input
@@ -93,6 +130,7 @@ const Register = () => {
               )}
             </div>
 
+            {/* Email input field */}
             <div>
               <label htmlFor="email" className="sr-only">Email</label>
               <input
@@ -111,6 +149,7 @@ const Register = () => {
               )}
             </div>
 
+            {/* Password input field */}
             <div>
               <label htmlFor="password" className="sr-only">Password</label>
               <input
@@ -129,6 +168,7 @@ const Register = () => {
               )}
             </div>
 
+            {/* Confirm Password input field */}
             <div>
               <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
               <input
@@ -147,6 +187,7 @@ const Register = () => {
               )}
             </div>
 
+            {/* Submit button */}
             <button
               type="submit"
               className="w-full bg-black text-white py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
@@ -155,6 +196,7 @@ const Register = () => {
             </button>
           </form>
 
+          {/* Login link for existing users */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
@@ -164,7 +206,9 @@ const Register = () => {
             </p>
           </div>
 
+          {/* Social registration section */}
           <div className="mt-6">
+            {/* Divider with "Or continue with" text */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />
@@ -174,7 +218,9 @@ const Register = () => {
               </div>
             </div>
 
+            {/* Social registration buttons */}
             <div className="mt-6 space-y-3">
+              {/* Google registration button */}
               <button 
                 onClick={() => alert('Google registration functionality coming soon!')}
                 className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm sm:text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
@@ -183,6 +229,7 @@ const Register = () => {
                 <span>Continue with Google</span>
               </button>
 
+              {/* Apple registration button */}
               <button 
                 onClick={() => alert('Apple registration functionality coming soon!')}
                 className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm sm:text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
@@ -191,6 +238,7 @@ const Register = () => {
                 <span>Continue with Apple</span>
               </button>
 
+              {/* Facebook registration button */}
               <button 
                 onClick={() => alert('Facebook registration functionality coming soon!')}
                 className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm sm:text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
@@ -201,6 +249,7 @@ const Register = () => {
             </div>
           </div>
 
+          {/* Terms and Privacy Policy links */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500 leading-relaxed">
               By creating an account, you agree to our{" "}
