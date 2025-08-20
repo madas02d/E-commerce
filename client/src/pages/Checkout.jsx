@@ -408,6 +408,10 @@ const Checkout = () => {
                       src={item.image}
                       alt={item.title}
                       className="w-12 h-12 object-cover rounded mr-3"
+                      onError={(e) => {
+                          e.target.onerror = null; // Prevent infinite loop
+                          e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'; // Fallback image
+                      }}
                     />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>

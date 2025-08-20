@@ -199,6 +199,10 @@ const Orders = () => {
                             src={item.product.image}
                             alt={item.product.title || 'Product'}
                             className="w-16 h-16 object-cover rounded-md"
+                            onError={(e) => {
+                                e.target.onerror = null; // Prevent infinite loop
+                                e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'; // Fallback image
+                            }}
                           />
                         ) : (
                           <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center">

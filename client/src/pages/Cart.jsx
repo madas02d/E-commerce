@@ -162,6 +162,10 @@ const Cart = () => {
                     src={item.image}
                     alt={item.title}
                     className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg mr-3 sm:mr-4 flex-shrink-0"
+                    onError={(e) => {
+                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'; // Fallback image
+                    }}
                   />
                   {/* Product details */}
                   <div className="flex-1 min-w-0">

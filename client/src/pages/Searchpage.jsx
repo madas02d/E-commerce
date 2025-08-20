@@ -256,6 +256,10 @@ function SearchPage() {
                                         src={dress.image}
                                         alt={dress.title}
                                         className="w-full h-60 object-cover object-top rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                                        onError={(e) => {
+                                            e.target.onerror = null; // Prevent infinite loop
+                                            e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'; // Fallback image
+                                        }}
                                     />
 
                                     {/* Wishlist Heart Icon */}

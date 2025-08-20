@@ -188,6 +188,10 @@ const Wishlist = () => {
                       src={item.product.image}
                       alt={item.product.title}
                       className="w-full h-48 object-cover"
+                      onError={(e) => {
+                          e.target.onerror = null; // Prevent infinite loop
+                          e.target.src = 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'; // Fallback image
+                      }}
                     />
                     {/* Remove from wishlist button */}
                     <button

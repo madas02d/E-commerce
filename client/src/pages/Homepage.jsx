@@ -20,6 +20,8 @@ import axios from "../utils/axios";
 import Toast from "../components/Toast";
 // Import Tidio analytics tracking utilities
 import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
+// Import image utilities
+import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils";
 
 /**
  * Homepage Component
@@ -168,6 +170,7 @@ function Homepage() {
                                         src={dress.image}
                                         alt={dress.title}
                                         className="w-full h-48 sm:h-60 object-cover object-top rounded-t-xl transition-transform duration-300 group-hover:scale-105"
+                                        onError={(e) => handleImageError(e, getCategoryFallbackImage(dress.category))}
                                     />
 
                                     {/* Wishlist heart icon (top right corner) */}
