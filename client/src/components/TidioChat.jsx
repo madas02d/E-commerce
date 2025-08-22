@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { TIDIO_CONFIG, trackTidioEvent, updateTidioUser } from '../config/tidio';
+import { TIDIO_CONFIG, trackTidioEvent, updateTidioUser } from '../config/tidio.js';
 
 const TidioChat = () => {
   const { user } = useContext(AuthContext);
