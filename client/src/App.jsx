@@ -4,7 +4,6 @@ import { FavoriteProvider } from "./context/FavoriteContext";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import ErrorBoundary from "./components/ErrorBoundary";
-import TidioChat from "./components/TidioChat";
 
 import Navbar from "./components/Navabar";
 import Homepage from "./pages/Homepage";
@@ -29,7 +28,6 @@ const App = () => {
           <CartProvider>
             <FavoriteProvider>
               <div className="min-h-screen flex flex-col">
-                <TidioChat />
                 <Navbar />
                 <main className="flex-1">
                   <Routes>

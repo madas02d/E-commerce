@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import Navbar from "../components/Navabar";
 import Banner from "../components/Banner";
 import { useLocation } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
@@ -10,7 +9,6 @@ import { AuthContext } from "../context/AuthContext";
 import { useFavorite } from "../context/FavoriteContext";
 import axios from "../utils/axios";
 import Toast from "../components/Toast";
-import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio"; 
 
 /**
  * SearchPage Component - Product search and filtering interface
@@ -29,7 +27,7 @@ function SearchPage() {
     const queryParams = new URLSearchParams(location.search);
     const initialCategory = queryParams.get("category") || "all"; 
     const searchQuery = queryParams.get("query") || ""; // Get search query from URL
-    const { addToCart, getCartCount } = useCart();
+    const { addToCart } = useCart();
     const { user } = useContext(AuthContext);
     const { favorites, toggleFavorite, loading: wishlistLoading } = useFavorite();
 
@@ -121,14 +119,6 @@ function SearchPage() {
         const value = e.target.value;
         console.log("🔍 Search Input Changed:", value);
         setSearchTerm(value);
-        
-        // Track search queries in Tidio for analytics
-        if (value.trim()) {
-            trackTidioEvent(TIDIO_CONFIG.EVENTS.SEARCH, {
-                query: value,
-                resultsCount: 0 // Will be updated when results are filtered
-            });
-        }
     };
 
     /**
