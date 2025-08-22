@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { TIDIO_CONFIG, trackTidioEvent, updateTidioUser } from '../config/tidio.js';
+// import { TIDIO_CONFIG, trackTidioEvent, updateTidioUser } from '../config/tidio.js';
 
 const TidioChat = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const TidioChat = () => {
       if (window.tidioChatApi) {
         // Set user information if logged in
         if (user) {
-          updateTidioUser(user);
+          // updateTidioUser(user);
         }
 
         // Set up event listeners for e-commerce tracking
@@ -20,17 +20,17 @@ const TidioChat = () => {
         });
 
         // Track page views
-        trackTidioEvent(TIDIO_CONFIG.EVENTS.PAGE_VIEW, {
-          page: window.location.pathname,
-          title: document.title
-        });
+        // trackTidioEvent(TIDIO_CONFIG.EVENTS.PAGE_VIEW, {
+        //   page: window.location.pathname,
+        //   title: document.title
+        // });
 
         // Track user actions
         const trackUserAction = (action, data = {}) => {
-          trackTidioEvent(action, {
-            ...data,
-            userId: user?._id
-          });
+          // trackTidioEvent(action, {
+          //   ...data,
+          //   userId: user?._id
+          // });
         };
 
         // Expose tracking function globally for other components
