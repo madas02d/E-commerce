@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { FavoriteProvider } from "./context/FavoriteContext";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
@@ -19,58 +19,66 @@ import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import Orders from "./pages/Orders";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <CartProvider>
-          <FavoriteProvider>
-            <TidioChat />
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/search" element={<Searchpage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              } />
-              <Route path="/order-success" element={
-                <ProtectedRoute>
-                  <OrderSuccess />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/wishlist" element={
-                <ProtectedRoute>
-                  <Wishlist />
-                </ProtectedRoute>
-              } />
-              <Route path="/orders" element={
-                <ProtectedRoute>
-                  <Orders />
-                </ProtectedRoute>
-              } />
-              {/* Redirect any unknown routes to /login */}
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
-          </FavoriteProvider>
-        </CartProvider>
-      </AuthProvider>
-    </ErrorBoundary>
+    <React.Fragment>
+      <ErrorBoundary>
+        <AuthProvider>
+          <CartProvider>
+            <FavoriteProvider>
+              <div className="min-h-screen flex flex-col">
+                <TidioChat />
+                <Navbar />
+                <main className="flex-1">
+                  <Routes>
+                    <Route path="/" element={<Homepage />} />
+                    <Route path="/search" element={<Searchpage />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/checkout" element={
+                      <ProtectedRoute>
+                        <Checkout />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/order-success" element={
+                      <ProtectedRoute>
+                        <OrderSuccess />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/profile" element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/dashboard" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/wishlist" element={
+                      <ProtectedRoute>
+                        <Wishlist />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/orders" element={
+                      <ProtectedRoute>
+                        <Orders />
+                      </ProtectedRoute>
+                    } />
+                    {/* Redirect any unknown routes to /login */}
+                    <Route path="*" element={<Navigate to="/login" />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </FavoriteProvider>
+          </CartProvider>
+        </AuthProvider>
+      </ErrorBoundary>
+    </React.Fragment>
   );
 };
 
