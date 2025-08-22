@@ -25,8 +25,8 @@ await connectDB();
 // Create Express application instance
 const app = express();
 
-// Set server port from environment variables or default to 5000
-const PORT = process.env.PORT || 5000;
+// Set server port from environment variables or default to 5002
+const PORT = process.env.PORT || 5002;
 
 // Configure CORS (Cross-Origin Resource Sharing) middleware
 // Allows requests from specified origins (frontend development servers)

@@ -10,8 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useFavorite } from "../context/FavoriteContext";
 import axios from "../utils/axios";
 import Toast from "../components/Toast";
-// import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
-import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils";
+import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio"; 
 
 /**
  * SearchPage Component - Product search and filtering interface
@@ -125,10 +124,10 @@ function SearchPage() {
         
         // Track search queries in Tidio for analytics
         if (value.trim()) {
-            // trackTidioEvent(TIDIO_CONFIG.EVENTS.SEARCH, {
-            //     query: value,
-            //     resultsCount: 0 // Will be updated when results are filtered
-            // });
+            trackTidioEvent(TIDIO_CONFIG.EVENTS.SEARCH, {
+                query: value,
+                resultsCount: 0 // Will be updated when results are filtered
+            });
         }
     };
 

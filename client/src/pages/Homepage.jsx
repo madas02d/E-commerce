@@ -19,7 +19,7 @@ import axios from "../utils/axios";
 // Import toast notification component
 import Toast from "../components/Toast";
 // Import Tidio analytics tracking utilities
-// import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
+import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
 // Import image utilities
 import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils";
 
@@ -78,20 +78,20 @@ function Homepage() {
             // Track Tidio analytics event based on action
             if (favorites.has(product._id)) {
                 // Track wishlist removal
-                // trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_REMOVE, {
-                //     productId: product._id,
-                //     productName: product.title,
-                //     productPrice: product.price,
-                //     category: product.category
-                // });
+                trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_REMOVE, {
+                    productId: product._id,
+                    productName: product.title,
+                    productPrice: product.price,
+                    category: product.category
+                });
             } else {
                 // Track wishlist addition
-                // trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_ADD, {
-                //     productId: product._id,
-                //     productName: product.title,
-                //     productPrice: product.price,
-                //     category: product.category
-                // });
+                trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_ADD, {
+                    productId: product._id,
+                    productName: product.title,
+                    productPrice: product.price,
+                    category: product.category
+                });
             }
         } catch (error) {
             console.error('Error toggling wishlist:', error);
@@ -232,13 +232,13 @@ function Homepage() {
                                                         await addToCart(dress);
                                                         
                                                         // Track Tidio analytics event
-                                                        // trackTidioEvent(TIDIO_CONFIG.EVENTS.ADD_TO_CART, {
-                                                        //     productId: dress._id,
-                                                        //     productName: dress.title,
-                                                        //     productPrice: dress.price,
-                                                        //     category: dress.category,
-                                                        //     quantity: 1
-                                                        // });
+                                                        trackTidioEvent(TIDIO_CONFIG.EVENTS.ADD_TO_CART, {
+                                                            productId: dress._id,
+                                                            productName: dress.title,
+                                                            productPrice: dress.price,
+                                                            category: dress.category,
+                                                            quantity: 1
+                                                        });
                                                         
                                                         // Show success feedback
                                                         setToast({ show: true, message: 'Item added to cart successfully!', type: 'success' });
