@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon main.js",
+    "start": "node main.js",
+    "dev": "nodemon main.js",
+    "build": "echo 'No build step required'",
     "seed":"node seed/seed_products.js"
   },
   "keywords": [],

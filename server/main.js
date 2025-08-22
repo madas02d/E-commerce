@@ -29,10 +29,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Configure CORS (Cross-Origin Resource Sharing) middleware
-// Allows requests from specified origins (frontend development servers)
+// Allows requests from specified origins (frontend development servers and Vercel)
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Frontend dev servers
+    origin: [
+      "http://localhost:5173", 
+      "http://localhost:5174",
+      "https://your-app-name.vercel.app", // Replace with your actual Vercel domain
+      "https://your-app-name-git-main-your-username.vercel.app" // Replace with your actual Vercel preview domain
+    ],
     credentials: true, // Allow cookies and authentication headers
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'] // Allowed request headers
@@ -46,11 +51,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Register API routes with their respective base paths
-app.use('/users', usersRouter);        // User authentication and management
-app.use("/products", productsRouter);   // Product catalog and details
-app.use("/carts", cartsRouter);        // Shopping cart operations
-app.use("/orders", ordersRouter);      // Order processing and management
-app.use("/wishlist", wishlistRouter);  // User wishlist functionality
+app.use('/api/users', usersRouter);        // User authentication and management
+app.use("/api/products", productsRouter);   // Product catalog and details
+app.use("/api/carts", cartsRouter);        // Shopping cart operations
+app.use("/api/orders", ordersRouter);      // Order processing and management
+app.use("/api/wishlist", wishlistRouter);  // User wishlist functionality
 
 // Error handling middleware (must be registered after routes)
 app.use(routeNotFound);        // Handle 404 errors for undefined routes
@@ -58,3 +63,6 @@ app.use(globalErrorHandler);   // Global error handler for all other errors
 
 // Start the server and listen on specified port
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+// Export for Vercel
+export default app;
