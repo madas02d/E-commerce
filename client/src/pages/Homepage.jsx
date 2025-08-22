@@ -157,7 +157,8 @@ function Homepage() {
                 </div>
 
                 {/* Product grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+                >
                     {dresses.length > 0 ? (
                         dresses.map((dress) => (
                             <div
@@ -211,7 +212,7 @@ function Homepage() {
                                     </div>
 
                                     {/* Add to Cart Button */}
-                                    <div className="mt-4">
+                                    <div className="mt-4 mb-4">
                                         {/* Login reminder for non-authenticated users */}
                                         {!user && (
                                             <p className="text-xs text-gray-500 mb-2 text-center">

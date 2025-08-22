@@ -1,7 +1,7 @@
 export default [
     // WOMEN'S PRODUCTS
     {
-      "title": "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
+      "title": "BIYLACLESEN Women's 3- in-1 Snowboard Jacket Winter Coats",
       "price": 56.99,
       "description": "Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates",
       "category": "Women",
