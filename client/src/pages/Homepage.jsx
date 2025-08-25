@@ -1,5 +1,7 @@
 // Import React hooks for state management and side effects
 import React, { useEffect, useState, useContext } from "react";
+// Import navigation component
+import Navbar from "../components/Navabar"
 // Import hero image asset
 import Hero from "../assets/Hero.jpeg"
 // Import banner component for promotional content
@@ -16,6 +18,8 @@ import { useFavorite } from "../context/FavoriteContext";
 import axios from "../utils/axios";
 // Import toast notification component
 import Toast from "../components/Toast";
+// Import Tidio analytics tracking utilities
+import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
 // Import image utilities
 import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils";
 
@@ -25,7 +29,7 @@ import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils"
  */
 function Homepage() {
     // Get cart functionality from context
-    const { addToCart } = useCart();
+    const { addToCart, getCartCount } = useCart();
     // Get current user from authentication context
     const { user } = useContext(AuthContext);
     // Get favorites functionality from context
@@ -70,6 +74,25 @@ function Homepage() {
 
         try {
             await toggleFavorite(product._id);
+            
+            // Track Tidio analytics event based on action
+            if (favorites.has(product._id)) {
+                // Track wishlist removal
+                trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_REMOVE, {
+                    productId: product._id,
+                    productName: product.title,
+                    productPrice: product.price,
+                    category: product.category
+                });
+            } else {
+                // Track wishlist addition
+                trackTidioEvent(TIDIO_CONFIG.EVENTS.WISHLIST_ADD, {
+                    productId: product._id,
+                    productName: product.title,
+                    productPrice: product.price,
+                    category: product.category
+                });
+            }
         } catch (error) {
             console.error('Error toggling wishlist:', error);
             setToast({ show: true, message: 'Failed to update wishlist', type: 'error' });
@@ -207,6 +230,15 @@ function Homepage() {
                                                     setAddingToCart(prev => ({ ...prev, [dress._id]: true }));
                                                     try {
                                                         await addToCart(dress);
+                                                        
+                                                        // Track Tidio analytics event
+                                                        trackTidioEvent(TIDIO_CONFIG.EVENTS.ADD_TO_CART, {
+                                                            productId: dress._id,
+                                                            productName: dress.title,
+                                                            productPrice: dress.price,
+                                                            category: dress.category,
+                                                            quantity: 1
+                                                        });
                                                         
                                                         // Show success feedback
                                                         setToast({ show: true, message: 'Item added to cart successfully!', type: 'success' });

@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// TODO: Replace with your actual deployed server URL
-// The proper way is to set VITE_API_URL in Vercel environment variables
-const baseURL = import.meta.env.VITE_API_URL || 'https://e-commerce-mwae.vercel.app/';
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5002';
 
 const instance = axios.create({
-    baseURL,    
+    baseURL,
     withCredentials: true
 });
 

@@ -29,15 +29,10 @@ const app = express();
 const PORT = process.env.PORT || 5002;
 
 // Configure CORS (Cross-Origin Resource Sharing) middleware
-// Allows requests from specified origins (frontend development servers and production)
+// Allows requests from specified origins (frontend development servers)
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", 
-      "http://localhost:5174",
-      "https://your-app.vercel.app", // Replace with your actual Vercel domain
-      "https://your-app-git-main-your-username.vercel.app" // Replace with your actual Vercel preview domain
-    ], 
+    origin: ["http://localhost:5173", "http://localhost:5174"], // Frontend dev servers
     credentials: true, // Allow cookies and authentication headers
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'] // Allowed request headers

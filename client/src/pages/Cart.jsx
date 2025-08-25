@@ -1,5 +1,5 @@
 // Import React hooks for state management
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 // Import cart context for cart management functionality
 import { useCart } from '../context/CartContext';
 // Import authentication context to check user login status
