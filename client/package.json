@@ -4,13 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --max-old-space-size=4096 --optimize-for-size ./node_modules/.bin/vite",
-    "dev:clean": "rm -rf node_modules/.vite && npm run dev",
-    "dev:low-memory": "node --max-old-space-size=2048 --optimize-for-size ./node_modules/.bin/vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test"
+},
   "dependencies": {
     "@fontsource/merriweather": "^5.2.9",
     "@tailwindcss/vite": "^4.0.6",
