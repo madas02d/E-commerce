@@ -5,10 +5,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --max-old-space-size=4096 --optimize-for-size ./node_modules/.bin/vite",
+    "dev": "vite",
     "dev:clean": "rm -rf node_modules/.vite && npm run dev",
     "dev:low-memory": "node --max-old-space-size=2048 --optimize-for-size ./node_modules/.bin/vite",
-    "build": "cd client && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
