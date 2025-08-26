@@ -1,13 +1,14 @@
 {
   "name": "client",
   "private": true,
+  "homepage": "https://e-commerce-4e22.vercel.app",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "node --max-old-space-size=4096 --optimize-for-size ./node_modules/.bin/vite",
     "dev:clean": "rm -rf node_modules/.vite && npm run dev",
     "dev:low-memory": "node --max-old-space-size=2048 --optimize-for-size ./node_modules/.bin/vite",
-    "build": "vite build",
+    "build": "cd client && npm run build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

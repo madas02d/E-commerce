@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  base: '/e-commerce',
   server: {
     port: 5173,
     strictPort: false, // Allow fallback ports
