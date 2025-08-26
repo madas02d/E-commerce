@@ -1,5 +1,7 @@
 // Import React hooks for state management and side effects
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+// Import navigation component
+import Navbar from "../components/Navabar"
 // Import hero image asset
 import Hero from "../assets/Hero.jpeg"
 // Import banner component for promotional content
@@ -20,7 +22,6 @@ import Toast from "../components/Toast";
 import { trackTidioEvent, TIDIO_CONFIG } from "../config/tidio";
 // Import image utilities
 import { handleImageError, getCategoryFallbackImage } from "../utils/imageUtils";
-
 
 /**
  * Homepage Component
