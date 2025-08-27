@@ -17,7 +17,7 @@ import {
   globalErrorHandler,
   routeNotFound,
 } from "./middleware/errorHandlers.js";
-import user from "./models/User.js"
+import user from "./models/User.js";
 
 // Initialize database connection
 await connectDB();
@@ -32,11 +32,16 @@ const PORT = process.env.PORT || 5002;
 // Allows requests from specified origins (frontend development servers)
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://e-commerce-git-main-madas02ds-projects.vercel.app"], // Frontend dev servers
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://e-commerce-git-main-madas02ds-projects.vercel.app",
+      "https://e-commerce-five-rho-26.vercel.app/"
+    ], // Frontend dev servers
     // origin: ["https://e-commerce-git-main-madas02ds-projects.vercel.app"], // Frontend dev servers
     credentials: true, // Allow cookies and authentication headers
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Allowed request headers
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
   })
 );
 
@@ -47,15 +52,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Register API routes with their respective base paths
-app.use('/users', usersRouter);        // User authentication and management
-app.use("/products", productsRouter);   // Product catalog and details
-app.use("/carts", cartsRouter);        // Shopping cart operations
-app.use("/orders", ordersRouter);      // Order processing and management
-app.use("/wishlist", wishlistRouter);  // User wishlist functionality
+app.use("/users", usersRouter); // User authentication and management
+app.use("/products", productsRouter); // Product catalog and details
+app.use("/carts", cartsRouter); // Shopping cart operations
+app.use("/orders", ordersRouter); // Order processing and management
+app.use("/wishlist", wishlistRouter); // User wishlist functionality
 
 // Error handling middleware (must be registered after routes)
-app.use(routeNotFound);        // Handle 404 errors for undefined routes
-app.use(globalErrorHandler);   // Global error handler for all other errors
+app.use(routeNotFound); // Handle 404 errors for undefined routes
+app.use(globalErrorHandler); // Global error handler for all other errors
 
 // Start the server and listen on specified port
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
