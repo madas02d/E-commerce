@@ -11,13 +11,17 @@ const tokenizeCookie = async (user, res) => {
     const token = jwt.sign({ id: user._id }, JWT_SECRET, {
       expiresIn: JWT_EXP,
     });
-    res.cookie("jwtToken", token, { 
+
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
       maxAge: 10 * 60 * 1000,  // 10 minutes
       httpOnly: true,
-      // Add these options for development
-      sameSite: 'lax',
-      secure: false  // set to true in production
-    }); 
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      path: '/'
+    };
+
+    res.cookie("jwtToken", token, cookieOptions); 
 };
   
 export const register = async (req, res, next) => {
@@ -90,11 +94,12 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie("jwtToken", { 
       httpOnly: true,
-      sameSite: 'lax',
-      secure: false,  // set to true in production
-      path: '/'  // Important! Make sure path matches cookie setting
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      path: '/'
     });
     
     res.status(200).json({
