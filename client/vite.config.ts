@@ -8,7 +8,7 @@ export default defineConfig({
   // base: '/e-commerce',
   server: {
     proxy: {
-      '/api': 'http://localhost:5173'
+      '/api': 'http://localhost:5173/products'
     },
     port: 5173,
     strictPort: false, // Allow fallback ports
