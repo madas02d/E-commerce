@@ -34,7 +34,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
+      "http://localhost:5002",
       "https://e-commerce-git-main-madas02ds-projects.vercel.app",
       "https://e-commerce-five-rho-26.vercel.app"
     ], // Frontend dev servers
