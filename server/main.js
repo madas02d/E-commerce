@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 5002;
 // Allows requests from specified origins (frontend development servers)
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Frontend dev servers
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://e-commerce-git-main-madas02ds-projects.vercel.app/products"], // Frontend dev servers
     // origin: ["https://e-commerce-git-main-madas02ds-projects.vercel.app"], // Frontend dev servers
     credentials: true, // Allow cookies and authentication headers
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
