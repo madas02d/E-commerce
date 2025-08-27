@@ -1,5 +1,6 @@
-// Import React hooks for state management
-import { useState, useContext } from 'react';
+/* eslint-disable no-unused-vars */
+// Import React and hooks
+import React, { useState, useContext } from 'react';
 // Import cart context for cart management functionality
 import { useCart } from '../context/CartContext';
 // Import authentication context to check user login status
@@ -114,7 +115,7 @@ const Cart = () => {
               </svg>
             </div>
             <h2 className="text-lg sm:text-xl font-semibold mb-2">Your cart is empty</h2>
-            <p className="text-gray-600 mb-6 text-sm sm:text-base">Looks like you haven't added any items to your cart yet.</p>
+            <p className="text-gray-600 mb-6 text-sm sm:text-base">Looks like you haven&apos;t added any items to your cart yet.</p>
             <button
               onClick={() => navigate('/search')}
               className="bg-orange-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base font-medium"

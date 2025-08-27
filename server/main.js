@@ -34,11 +34,11 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5002",
+      "http://localhost:5174",
       "https://e-commerce-git-main-madas02ds-projects.vercel.app",
       "https://e-commerce-five-rho-26.vercel.app"
     ], // Frontend dev servers
-    // origin: ["https://e-commerce-git-main-madas02ds-projects.vercel.app"], // Frontend dev servers
+
     credentials: true, // Allow cookies and authentication headers
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
