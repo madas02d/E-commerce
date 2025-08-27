@@ -7,9 +7,6 @@ export default defineConfig({
   ],
   // base: '/e-commerce',
   server: {
-    // proxy: {
-    //   '/api': 'http://localhost:5173/products'
-    // },
     port: 5173,
     strictPort: false, // Allow fallback ports
     hmr: {
@@ -22,6 +19,7 @@ export default defineConfig({
     }
   },
   build: {
+    outDir: "dist",
     rollupOptions: {
       output: {
         manualChunks: {
