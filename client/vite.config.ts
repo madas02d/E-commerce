@@ -19,7 +19,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: "dist",
+    outDir: "client/dist",
     rollupOptions: {
       output: {
         manualChunks: {
