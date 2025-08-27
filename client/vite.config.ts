@@ -40,7 +40,6 @@ export default defineConfig({
   },
   esbuild: {
     target: 'es2020',
-    minify: 'terser',
     keepNames: false
   }
 })
