@@ -19,7 +19,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: "client/dist",
+    outDir: "dist", // Fixed: should be relative to client directory
     rollupOptions: {
       output: {
         manualChunks: {
@@ -29,7 +29,16 @@ export default defineConfig({
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1000,
+    // Mobile optimizations
+    target: 'es2020',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console logs in production
+        drop_debugger: true
+      }
+    }
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'axios'],

@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import connectDB from "./utils/database.js";
+import seedDatabase from "./seedOnStart.js";
 
 // Import route handlers for different API endpoints
 import usersRouter from "./routes/usersRouter.js";
@@ -22,6 +23,9 @@ import user from "./models/User.js";
 // Initialize database connection
 await connectDB();
 
+// Seed database if needed
+await seedDatabase();
+
 // Create Express application instance
 const app = express();
 
@@ -36,9 +40,9 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "https://e-commerce-git-main-madas02ds-projects.vercel.app",
-      "https://e-commerce-five-rho-26.vercel.app"
+      "https://e-commerce-five-rho-26.vercel.app",
+      "https://e-commerce-ghl2.vercel.app"
     ], // Frontend dev servers
-
     credentials: true, // Allow cookies and authentication headers
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
