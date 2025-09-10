@@ -38,16 +38,34 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       
+      // Normalize product ID - use _id if available, otherwise use id
+      const productId = product._id || product.id;
+      
       // Use local storage for cart management (simpler and more reliable)
-      const existingItem = cart.find(item => item.id === product.id);
+      const existingItem = cart.find(item => {
+        const itemId = item._id || item.id;
+        return itemId === productId;
+      });
+      
       if (existingItem) {
-        setCart(cart.map(item => 
-          item.id === product.id 
+        setCart(cart.map(item => {
+          const itemId = item._id || item.id;
+          return itemId === productId 
             ? { ...item, quantity: item.quantity + 1 }
-            : item
-        ));
+            : item;
+        }));
       } else {
-        setCart([...cart, { ...product, quantity: 1 }]);
+        // Ensure the product has both _id and id for compatibility
+        const normalizedProduct = {
+          ...product,
+          _id: productId,
+          id: productId,
+          // Ensure we have the required fields for display
+          title: product.name || product.title,
+          image: product.image,
+          price: product.price
+        };
+        setCart([...cart, { ...normalizedProduct, quantity: 1 }]);
       }
       
       return { success: true, message: 'Product added to cart' };
@@ -62,7 +80,10 @@ export const CartProvider = ({ children }) => {
   const removeFromCart = async (productId) => {
     try {
       setLoading(true);
-      setCart(cart.filter(item => item.id !== productId));
+      setCart(cart.filter(item => {
+        const itemId = item._id || item.id;
+        return itemId !== productId;
+      }));
     } catch (error) {
       console.error('Error removing from cart:', error);
       throw error;
@@ -74,11 +95,12 @@ export const CartProvider = ({ children }) => {
   const updateQuantity = async (productId, quantity) => {
     try {
       setLoading(true);
-      setCart(cart.map(item => 
-        item.id === productId 
+      setCart(cart.map(item => {
+        const itemId = item._id || item.id;
+        return itemId === productId 
           ? { ...item, quantity: Math.max(0, quantity) }
-          : item
-      ));
+          : item;
+      }));
     } catch (error) {
       console.error('Error updating quantity:', error);
       throw error;
@@ -110,6 +132,10 @@ export const CartProvider = ({ children }) => {
     return cart.reduce((count, item) => count + item.quantity, 0);
   };
 
+  const getCartItems = () => {
+    return cart;
+  };
+
   const value = {
     cart,
     loading,
@@ -118,7 +144,8 @@ export const CartProvider = ({ children }) => {
     updateQuantity,
     clearCart,
     getCartTotal,
-    getCartCount
+    getCartCount,
+    getCartItems
   };
 
   return (
@@ -126,4 +153,4 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
-}; 
+};
