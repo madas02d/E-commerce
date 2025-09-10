@@ -55,6 +55,15 @@ app.use(express.json());
 // Parse cookies from incoming requests
 app.use(cookieParser());
 
+// Add a simple root route
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "E-commerce API Server is running", 
+    version: "1.0.0",
+    endpoints: ["/users", "/products", "/carts", "/orders", "/wishlist"]
+  });
+});
+
 // Register API routes with their respective base paths
 app.use("/users", usersRouter); // User authentication and management
 app.use("/products", productsRouter); // Product catalog and details
